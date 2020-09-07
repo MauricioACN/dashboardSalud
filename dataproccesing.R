@@ -22,21 +22,83 @@ set_vars = cbind(set_vars,varaibles_list) %>% select(-trash)
 df = base %>% select(set_vars$numero_preg)
 
 ### Data cleaning
-educacion = c("")
-horas = c("")
-horas1 = c("")
+educacion = c("Técnico","Pregrado","Diplomado","Maestría","Posgrado")
+horas = c("Entre 20 y 39 horas","Entre 40 y 59 horas","Entre 60 y 79 horas","80 horas o más")
+horas1 = c("Menos de 1 año","De 1-5 años","De 6-10 años","De 11-15 años","16 años o más")
 cinco_opcion = c("Muy de acuerdo","De acuerdo","Indiferente","En desacuerdo","Muy en desacuerdo")
-cuatro_opcionA = c("Muy de acuerdo","De acuerdo","En desacuerdo","Muy en desacuerdo")
-cuatro_opcion_pos = c("Muy de acuerdo","De acuerdo","Indiferente","En desacuerdo")
-cuatro_opcion_neg = c("De acuerdo","Indiferente","En desacuerdo","Muy en desacuerdo")
+temp_a = c("Nunca","Casi nunca","A veces","Casi siempre","Siempre")
 
-df_clean = df %>% mutate(`189`= as.character(`189`),
-                         `186`= as.character(`186`),
-                         `147`= as.character(`147`),
-                         `144`= as.factor(`144`),
-                         `12`= factor(`12`,levels = educacion),
+### Clean
+df_clean = df %>% mutate(`12`= factor(`12`,levels = educacion),
                          `18`= factor(`18`,levels = horas),
-                         `21`= factor(`21`,levels = horas1),
-                         `66`= ifelse(`66`=="","Indiferente",`66`),
-                         `177`= ifelse(`177`=="De cauerdo","De acuerdo",`177`),
+                         `30`= factor(`30`,levels = cinco_opcion),
+                         `33`= factor(`33`,levels = cinco_opcion),
+                         `36`= factor(`36`,levels = cinco_opcion),
+                         `39`= factor(`39`,levels = cinco_opcion),
+                         `42`= factor(`42`,levels = cinco_opcion),
+                         `45`= factor(`45`,levels = cinco_opcion),
+                         `48`= factor(`48`,levels = cinco_opcion),
+                         `51`= factor(`51`,levels = cinco_opcion),
+                         `54`= factor(`54`,levels = cinco_opcion),
+                         `57`= factor(`57`,levels = cinco_opcion),
+                         `63`= factor(`63`,levels = cinco_opcion),
+                         `69`= factor(`69`,levels = cinco_opcion),
+                         `72`= factor(`72`,levels = cinco_opcion),
+                         `75`= factor(`75`,levels = cinco_opcion),
+                         `78`= factor(`78`,levels = cinco_opcion),
+                         `81`= factor(`81`,levels = cinco_opcion),
+                         `90`= factor(`90`,levels = cinco_opcion),
+                         `93`= factor(`93`,levels = cinco_opcion),
+                         `96`= factor(`96`,levels = temp_a),
+                         `99`= factor(`99`,levels = temp_a),
+                         `102`= factor(`102`,levels = temp_a),
+                         `105`= factor(`105`,levels = temp_a),
+                         `108`= factor(`108`,levels = temp_a),
+                         `111`= factor(`111`,levels = temp_a),
+                         `114`= factor(`114`,levels = temp_a),
+                         `117`= factor(`117`,levels = temp_a),
+                         `120`= factor(`120`,levels = temp_a),
+                         `123`= factor(`123`,levels = temp_a),
+                         `126`= factor(`126`,levels = temp_a),
+                         `132`= factor(`132`,levels = temp_a),
+                         `135`= factor(`135`,levels = temp_a),
+                         `138`= factor(`138`,levels = temp_a),
+                         `141`= factor(`141`,levels = temp_a),
+                         `144`= as.factor(`144`),
+                         `147`= as.character(`147`),
+                         `150`= as.character(`150`),
+                         `153`= factor(`153`,levels = cinco_opcion),
+                         `156`= factor(`156`,levels = cinco_opcion),
+                         `159`= factor(`159`,levels = cinco_opcion),
+                         `162`= factor(`162`,levels = cinco_opcion),
+                         `165`= factor(`165`,levels = cinco_opcion),
+                         `168`= factor(`168`,levels = cinco_opcion),
+                         `171`= factor(`171`,levels = cinco_opcion),
+                         `174`= factor(`174`,levels = cinco_opcion),
+                         `180`= factor(`180`,levels = cinco_opcion),
+                         `183`= factor(`183`,levels = cinco_opcion),
+                         `186`= as.character(`186`),
+                         `189`= as.character(`189`))
+###
+levels(df_clean$`21`)[levels(df_clean$`21`)==""] = "Menos de 1 año"
+levels(df_clean$`66`)[levels(df_clean$`66`)==""] = "Indiferente"
+levels(df_clean$`84`)[levels(df_clean$`84`)=="De cauerdo"] = "De acuerdo"
+levels(df_clean$`177`)[levels(df_clean$`177`)=="De cauerdo"] = "De acuerdo"
+levels(df_clean$`177`)[levels(df_clean$`177`)==""] = "Indiferente"
+levels(df_clean$`129`)[levels(df_clean$`129`)=="Siemrpe"] = "Siempre"
+##
+df_clean = df_clean %>% mutate(`21`= factor(`21`,levels = horas1),
+                         `66`= factor(`66`,levels = cinco_opcion),
+                         `84`= factor(`84`,levels = cinco_opcion),
+                         `177`= factor(`177`,levels = cinco_opcion),
+                         `129`= factor(`129`,levels = temp_a),
+                         `150`= tolower(`150`),
+                         `150`= ifelse(`150`=="ninguno","0",`150`),
                          )
+
+#Falta modificar las variables de texto, 150, 147, 186,189
+#Falta modificar la etiqueta para que en vez de números salgan la Preg#
+
+
+###write RDS Data clean 
+write_rds(df_clean,"BD_clean.rds")
