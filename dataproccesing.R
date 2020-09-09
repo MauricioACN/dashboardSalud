@@ -29,7 +29,8 @@ cinco_opcion = c("Muy de acuerdo","De acuerdo","Indiferente","En desacuerdo","Mu
 temp_a = c("Nunca","Casi nunca","A veces","Casi siempre","Siempre")
 
 ### Clean
-df_clean = df %>% mutate(`12`= factor(`12`,levels = educacion),
+df_clean = df %>% mutate(id = as.character(seq.int(from = 1,to = nrow(df),by = 1)),
+                         `12`= factor(`12`,levels = educacion),
                          `18`= factor(`18`,levels = horas),
                          `30`= factor(`30`,levels = cinco_opcion),
                          `33`= factor(`33`,levels = cinco_opcion),
@@ -87,18 +88,50 @@ levels(df_clean$`177`)[levels(df_clean$`177`)=="De cauerdo"] = "De acuerdo"
 levels(df_clean$`177`)[levels(df_clean$`177`)==""] = "Indiferente"
 levels(df_clean$`129`)[levels(df_clean$`129`)=="Siemrpe"] = "Siempre"
 ##
+texto1 = "personalmente 0, ya que la persona que se ha encargado de la notificación ha sido mi jefe inmediato."
+texto2 = "durante este último año los reportes se han realizado por la aplicación institucional res (1evento por flebitis química)"
+
 df_clean = df_clean %>% mutate(`21`= factor(`21`,levels = horas1),
                          `66`= factor(`66`,levels = cinco_opcion),
                          `84`= factor(`84`,levels = cinco_opcion),
                          `177`= factor(`177`,levels = cinco_opcion),
                          `129`= factor(`129`,levels = temp_a),
                          `150`= tolower(`150`),
-                         `150`= ifelse(`150`=="ninguno","0",`150`),
-                         )
+                         `150`= gsub("ninguno",0,`150`),
+                         `150`= gsub(texto1,0,`150`),
+                         `150`= ifelse(`150`== texto2,1,`150`),
+                         `150`= ifelse(`150`=="aproximadamente 14 ",14,`150`),
+                         `150`= ifelse(`150`=="pocos ",1,`150`),
+                         `150`= ifelse(`150`=="uno",1,`150`),
+                         `150`= ifelse(`150`=="dos",2,`150`),
+                         `150`= gsub("3 a 4",3,`150`),
+                         `150`= ifelse(`150`=="no llevo la cuenta",1,`150`),
+                         `150`= as.numeric(`150`),
+                         `150` = as.factor(ifelse(`150`<=0,"Ningún Evento",
+                                        ifelse(`150`<=2,"1 a 2 Eventos",
+                                               ifelse(`150`<=4,"3 a 4 Eventos","Más de 5 Eventos")))),
+                         `147`= tolower(`147`),
+                         `147`= ifelse(`147`=="",NA,`147`),
+                         `186`= tolower(`186`),
+                         `186`= ifelse(`186`=="no",NA,
+                                       ifelse(`186`=="ninguna",NA,
+                                              ifelse(`186`=="ninguno",NA,
+                                                     ifelse(`186`=="ninguna ",NA,`186`)))),
+                         `186`= ifelse(`186`=="",NA,`186`),
+                         `186`= chartr("áéíóúñ","aeioun",`186`),
+                         `186`= gsub('[[:punct:] ]+',' ',`186`),
+                         `189`= ifelse(`189`=="",NA,`189`),
+                         `189`= tolower(`189`),
+                         `189`= chartr("áéíóúñ","aeioun",`189`),
+                         `189`= gsub('[[:punct:] ]+',' ',`189`),
+                         `147`= ifelse(`147`=="",NA,`147`),
+                         `147`= tolower(`147`),
+                         `147`= chartr("áéíóúñ","aeioun",`147`),
+                         `147`= gsub('[[:punct:] ]+',' ',`147`))
 
-#Falta modificar las variables de texto, 150, 147, 186,189
-#Falta modificar la etiqueta para que en vez de números salgan la Preg#
-
+##Rename
+colnames(df_clean) = c(set_vars$Cod,"id")
+df_clean = df_clean[,c(61,1:60)]
 
 ###write RDS Data clean 
 write_rds(df_clean,"BD_clean.rds")
