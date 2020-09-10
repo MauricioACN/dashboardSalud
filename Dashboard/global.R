@@ -1,0 +1,22 @@
+###library(shiny)
+library(dashboardthemes)
+library(DT)
+library(ggplot2)
+library(plotly)
+library(tidyverse)
+library(shinydashboard)
+library(mltools)
+library(shinyWidgets)
+library(wordcloud2)
+library(text2vec)
+
+###Data
+df = readRDS("BD_clean.rds")
+set = readRDS("set_variables.rds")
+
+set_positivo =  set %>% filter(Tipo_pregunta=="POS",as.numeric(numero_preg)>=9,as.numeric(numero_preg)<=93) %>% select(Cod,Pregunta)
+set_negativo = set %>% filter(Tipo_pregunta=="NEG",as.numeric(numero_preg)>=9,as.numeric(numero_preg)<=93) %>% select(Cod,Pregunta)
+set_positivo2 = set %>% filter(Tipo_pregunta=="POS",as.numeric(numero_preg)>=94,as.numeric(numero_preg)<=150,!Cod %in% c("Preg46","Preg47","Preg48")) %>% select(Cod,Pregunta)
+set_negativo2 = set %>% filter(Tipo_pregunta=="NEG",as.numeric(numero_preg)>=94,as.numeric(numero_preg)<=150,!Cod %in% c("Preg46","Preg47","Preg48")) %>% select(Cod,Pregunta)
+set_positivo3 = set %>% filter(Tipo_pregunta=="POS",as.numeric(numero_preg)>=153,as.numeric(numero_preg)<=183) %>% select(Cod,Pregunta)
+set_negativo3 = set %>% filter(Tipo_pregunta=="NEG",as.numeric(numero_preg)>=153,as.numeric(numero_preg)<=183) %>% select(Cod,Pregunta)
