@@ -91,6 +91,8 @@ levels(df_clean$`129`)[levels(df_clean$`129`)=="Siemrpe"] = "Siempre"
 texto1 = "personalmente 0, ya que la persona que se ha encargado de la notificación ha sido mi jefe inmediato."
 texto2 = "durante este último año los reportes se han realizado por la aplicación institucional res (1evento por flebitis química)"
 
+eventos = c("Ningún Evento","1 a 2 Eventos","3 a 4 Eventos","Más de 5 Eventos")
+
 df_clean = df_clean %>% mutate(`21`= factor(`21`,levels = horas1),
                          `66`= factor(`66`,levels = cinco_opcion),
                          `84`= factor(`84`,levels = cinco_opcion),
@@ -110,6 +112,7 @@ df_clean = df_clean %>% mutate(`21`= factor(`21`,levels = horas1),
                          `150` = as.factor(ifelse(`150`<=0,"Ningún Evento",
                                         ifelse(`150`<=2,"1 a 2 Eventos",
                                                ifelse(`150`<=4,"3 a 4 Eventos","Más de 5 Eventos")))),
+                         `150`= factor(`150`,levels = eventos),
                          `147`= tolower(`147`),
                          `147`= ifelse(`147`=="",NA,`147`),
                          `186`= tolower(`186`),
@@ -133,5 +136,17 @@ df_clean = df_clean %>% mutate(`21`= factor(`21`,levels = horas1),
 colnames(df_clean) = c(set_vars$Cod,"id")
 df_clean = df_clean[,c(61,1:60)]
 
+###Tipo de pregunta
+tipo_respuesta = gather(df_clean[,c(10:46,49:58)],key = "Pregunta","Respuesta")
+tipo_respuesta$Tipo_respuesta = ifelse(str_detect(tipo_respuesta$Respuesta,"veces"),"Tipo I",
+                                       ifelse(str_detect(tipo_respuesta$Respuesta,"acuerdo"),"Tipo II","Otro"))
+##
+tipo_respuesta = tipo_respuesta %>% group_by(Pregunta,Tipo_respuesta) %>% summarize(no =n()) %>% select(-no)
+tipo_respuesta = tipo_respuesta %>% filter(str_detect(Tipo_respuesta,"Tipo"))
+###
+set_vars = left_join(set_vars,tipo_respuesta, by = c("Cod"="Pregunta"))
+
+
 ###write RDS Data clean 
-write_rds(df_clean,"BD_clean.rds")
+write_rds(df_clean,"Dashboard/BD_clean.rds")
+write_rds(set_vars,"Dashboard/set_variables.rds")
