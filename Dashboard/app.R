@@ -52,7 +52,8 @@ ui = dashboardPage(
                                      tabPanel(title = "Analisis 2",shinydashboard::box(plotlyOutput("p6_1"),width = "600px")))),
                        column(6,
                               tabBox(title = "Análisis de Preguntas Negativas",id = "secc_perc2",width = "600px",
-                                     tabPanel(title = "Analisis 1",shinydashboard::box(plotlyOutput("p7"),width = "600px"))))
+                                     tabPanel(title = "Analisis 1",shinydashboard::box(plotlyOutput("p7"),width = "600px")),
+                                     tabPanel(title = "Analisis 2",shinydashboard::box(plotlyOutput("p7_1"),width = "600px"))))
               ),
               fluidRow(column(2,fluidRow(column(6,box(h5(title=set_positivo$Pregunta[1],a("Pregunta 17"),style="color: #E8DED2"),width = "400px")),
                                          column(6,box(h5(title=set_positivo$Pregunta[2],a("Pregunta 22"),style="color: #E8DED2"),width = "400px")),
@@ -63,8 +64,8 @@ ui = dashboardPage(
                          column(12,tabBox(title = "Análisis de Otras Preguntas",id = "seccion2",width = "800px",
                                           tabPanel("Preg46",p(set$Pregunta[45]),hr(),plotlyOutput("p10")),
                                           tabPanel("Preg47",p(set$Pregunta[46]),hr(),wordcloud2::wordcloud2Output("CloudWord")),
-                                          tabPanel("Preg59",p(set$Pregunta[59]),hr(),wordcloud2::wordcloud2Output("p14")),
-                                          tabPanel("Preg60",p(set$Pregunta[60]),hr(),wordcloud2::wordcloud2Output("p15"))))
+                                          tabPanel("Preg60",p(set$Pregunta[59]),hr(),wordcloud2::wordcloud2Output("p14")),
+                                          tabPanel("Preg61",p(set$Pregunta[60]),hr(),wordcloud2::wordcloud2Output("p15"))))
                        )),
                        column(2,fluidRow(column(6,box(h5(title=set_negativo$Pregunta[1],a("Pregunta 24"),style="color: #E8DED2"),width = "400px")),
                                          column(6,box(h5(title=set_negativo$Pregunta[2],a("Pregunta 39"),style="color: #E8DED2"),width = "400px")))
@@ -116,8 +117,7 @@ ui = dashboardPage(
                                        column(4,box(h6(title=set_negativo2$Pregunta[6],a("Pregunta 23"),style="color: #E8DED2"),width = "400px"))),
                               fluidRow(column(4,box(h6(title=set_negativo2$Pregunta[7],a("Pregunta 28"),style="color: #E8DED2"),width = "400px")),
                                        column(4,box(h6(title=set_negativo2$Pregunta[8],a("Pregunta 29"),style="color: #E8DED2"),width = "400px")),
-                                       column(4,box(h6(title=set_negativo2$Pregunta[9],a("Pregunta 35"),style="color: #E8DED2"),width = "400px"))),
-                              fluidRow(column(4,box(h6(title=set_negativo2$Pregunta[10],a("Pregunta 40"),style="color: #E8DED2"),width = "1200px")))))
+                                       column(4,box(h6(title=set_negativo2$Pregunta[9],a("Pregunta 35"),style="color: #E8DED2"),width = "400px")))))
               ),
       tabItem(tabName = "seguridad",
               
@@ -350,7 +350,7 @@ server = (function(input, output, session) {
       data = spread(data = data,key = Preg,value = valor,fill = 0)
       
       fig <- plot_ly(type = 'scatterpolar',fill = 'toself',data = data)
-      fig <- fig %>% add_trace(r = ~Preg39, theta = ~Categ, name = set_negativo$Cod[1])
+      fig <- fig %>% add_trace(r = ~Preg39, theta = ~Categ, name = set_negativo$Cod[2])
       
       
       fig <- fig %>%  layout(polar = list(radialaxis = list(visible = T,range = c(0,50))))
