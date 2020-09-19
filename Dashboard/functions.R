@@ -39,7 +39,21 @@ tab_function = function(base,sub_total){
     data_tab = data_tab %>% group_by(Preg,Categoria) %>% summarize(valor = sum(valor,na.rm = T)) %>% mutate(valor = round(valor/sub_total*100,2))
     data_tab = spread(data = data_tab,key = Categoria,value = valor,fill = 0)
     data_tab = left_join(data_tab,set, by = c("Preg"="Cod")) %>% select(Preg,Pregunta,Tipo_pregunta,Tipo_respuesta,Variables,Objetivo,`Respuestas Positivas`,`Respuestas Neutras`,`Respuestas Negativas`) %>% ungroup() %>% arrange(Preg)
-    data_tab$Preg = as.numeric(gsub("\\Preg","",data_tab$Preg))
+    data_tab$Preg = as.character(gsub("\\Preg","",data_tab$Preg))
     
     return(data_tab)  
 }
+
+
+#Function ngrams
+ngrams_func = function(data,n_gram,n_row){
+    data <- quanteda::tokens(data$text)
+    data = quanteda::tokens_ngrams(data,n = n_gram)
+    dtm <- dfm(data)
+    data <- as.matrix(dtm)
+    data_f <- sort(colSums(data),decreasing=TRUE)
+    data_f <- data.frame(word = names(data_f),freq=data_f)
+    data_f <- data_f[c(1:n_row),]
+    return(data_f)
+}
+
