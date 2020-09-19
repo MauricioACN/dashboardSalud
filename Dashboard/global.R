@@ -10,6 +10,8 @@ library(shinyWidgets)
 library(wordcloud2)
 library(data.table)
 library(text2vec)
+library(quanteda)
+
 
 ###Data
 df = readRDS("BD_clean.rds")
