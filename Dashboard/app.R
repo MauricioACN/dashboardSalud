@@ -57,8 +57,8 @@ ui = dashboardPage(
               fluidRow(column(2,fluidRow(column(6,box(h5(title=set_positivo$Pregunta[1],a("Pregunta 17"),style="color: #E8DED2"),width = "400px")),
                                          column(6,box(h5(title=set_positivo$Pregunta[2],a("Pregunta 22"),style="color: #E8DED2"),width = "400px")),
                                          column(6,box(h5(title=set_positivo$Pregunta[3],a("Pregunta 25"),style="color: #E8DED2"),width = "400px")),
-                                         column(6,box(h5(title=set_positivo$Pregunta[5],a("Pregunta 41"),style="color: #E8DED2"),width = "400px")),
-                                         column(6,box(h5(title=set_positivo$Pregunta[6],a("Pregunta 45"),style="color: #E8DED2"),width = "400px")))),
+                                         column(6,box(h5(title=set_positivo$Pregunta[4],a("Pregunta 41"),style="color: #E8DED2"),width = "400px")),
+                                         column(6,box(h5(title=set_positivo$Pregunta[5],a("Pregunta 45"),style="color: #E8DED2"),width = "400px")))),
                        column(8,fluidRow(
                          column(12,tabBox(title = "Análisis de Otras Preguntas",id = "seccion2",width = "800px",
                                           tabPanel("Preg46",p(set$Pregunta[45]),hr(),plotlyOutput("p10")),
@@ -67,7 +67,7 @@ ui = dashboardPage(
                                           tabPanel("Preg60",p(set$Pregunta[60]),hr(),wordcloud2::wordcloud2Output("p15"))))
                        )),
                        column(2,fluidRow(column(6,box(h5(title=set_negativo$Pregunta[1],a("Pregunta 24"),style="color: #E8DED2"),width = "400px")),
-                                         column(6,box(h5(title=set_positivo$Pregunta[2],a("Pregunta 39"),style="color: #E8DED2"),width = "400px")))
+                                         column(6,box(h5(title=set_negativo$Pregunta[2],a("Pregunta 39"),style="color: #E8DED2"),width = "400px")))
                        ))
                        ),
       tabItem(tabName = "servicio",
@@ -456,11 +456,7 @@ server = (function(input, output, session) {
     output$CloudWord <- wordcloud2::renderWordcloud2({
       
       data = df_filter() %>% mutate(text = Preg47) %>% select(text) %>% preprocesing(.)
-      data <- Corpus(VectorSource(data$text))
-      dtm <- TermDocumentMatrix(data)
-      data <- as.matrix(dtm)
-      data_f <- sort(rowSums(data),decreasing=TRUE)
-      data_f <- data.frame(word = names(data_f),freq=data_f)
+      data_f <- ngrams_func(data,n_gram = 2,n_row = 30)
       fig = wordcloud2::wordcloud2(data_f,minSize = 0.7,size = 1)
       fig
     })
@@ -542,11 +538,7 @@ server = (function(input, output, session) {
     output$p14 <- wordcloud2::renderWordcloud2({
       
       data = df_filter() %>% mutate(text = Preg60) %>% select(text) %>% preprocesing(.)
-      data <- Corpus(VectorSource(data$text))
-      dtm <- TermDocumentMatrix(data)
-      data <- as.matrix(dtm)
-      data_f <- sort(rowSums(data),decreasing=TRUE)
-      data_f <- data.frame(word = names(data_f),freq=data_f)
+      data_f <- ngrams_func(data,n_gram = 2,n_row = 80)
       fig = wordcloud2::wordcloud2(data_f,minSize = 0.2,size = 0.5)
       fig
     })
@@ -554,11 +546,7 @@ server = (function(input, output, session) {
     output$p15 <- wordcloud2::renderWordcloud2({
       
       data = df_filter() %>% mutate(text = Preg61) %>% select(text) %>% preprocesing(.)
-      data <- Corpus(VectorSource(data$text))
-      dtm <- TermDocumentMatrix(data)
-      data <- as.matrix(dtm)
-      data_f <- sort(rowSums(data),decreasing=TRUE)
-      data_f <- data.frame(word = names(data_f),freq=data_f)
+      data_f <- ngrams_func(data,n_gram = 2,n_row = ifelse(nrow(data)<15,nrow(data),60))
       fig = wordcloud2::wordcloud2(data_f,minSize = 0.2,size = 0.5)
       fig
     })
