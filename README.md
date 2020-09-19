@@ -1,7 +1,7 @@
 # dashboardSalud
 
 <p align="center">
-<img src="man/principal.png" align="center" width="100%" alt="Principal iInterface screen"/>
+<img src="man/principal.png" align="center" width="80%" alt="Principal Interface screen"/>
 </p>
 
 ## Check It Out
@@ -16,7 +16,7 @@ The filter section on the left allows the user to filter the information that is
 
 Currently, the dashboard includes the following tabs and features:
 
-- &#x1f46b; **Caracterización** <img src="man/all.png" align="right" width="35%"  />
+- &#x1f46b; **Caracterización** <img src="man/all.png" align="right" width="45%"  />
 
     The characterization corresponds to the responses obtained from 52 people who currently work for an Intensive Care Unit (UCI) in Colombia. This section of the application contains all the descriptive graphs related to the characteristics of these people, analyzing different aspects in an aggregate manner. 
 
