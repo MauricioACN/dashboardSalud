@@ -1,7 +1,7 @@
 # dashboardSalud
 
 <p align="center">
-<img src="man/principal.png" align="center" width="75%" alt="Principal iInterface screen"/>
+<img src="man/principal.png" align="center" width="100%" alt="Principal iInterface screen"/>
 </p>
 
 ## Check It Out
